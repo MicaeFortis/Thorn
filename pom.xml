@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.ho.studio</groupId>
-	<artifactId>subscribtion-organizer</artifactId>
+	<artifactId>thorn</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Subscribtion Organizer</name>
-	<description>Subscribtion Organizer</description>
+	<name>Thorn</name>
+	<description>Thorn</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

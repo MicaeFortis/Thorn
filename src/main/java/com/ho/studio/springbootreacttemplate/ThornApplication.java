@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringbootreacttemplateApplication {
+public class ThornApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringbootreacttemplateApplication.class, args);
+		SpringApplication.run(ThornApplication.class, args);
 	}
 }

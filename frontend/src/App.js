@@ -1,6 +1,5 @@
 import React from 'react';
-import Applications from './Applications';
-import Services from './Services';
+import Prefixes from './Prefixes';
 import 'antd/dist/antd.css';
 import Dashboard from './Dashboard';
 import {
@@ -41,11 +40,8 @@ class App extends React.Component {
                             <Menu.Item key="/">
                                 <Link to="/">Dashboard</Link>
                             </Menu.Item>
-                            <Menu.Item key="/applications">
-                                <Link to="/applications">Applications</Link>
-                            </Menu.Item>
-                            <Menu.Item key="/services">
-                                <Link to="/services">Services</Link>
+                            <Menu.Item key="/prefixes">
+                                <Link to="/prefixes">Prefixes</Link>
                             </Menu.Item>
                         </Menu>
                     </Header>
@@ -53,12 +49,11 @@ class App extends React.Component {
                     >
                         <Switch>
                             <Route exact path="/" component={Dashboard}/>
-                            <Route path="/applications" component={Applications}/>
-                            <Route path="/services" component={Services}/>
+                            <Route path="/prefixes" component={Prefixes}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>
-                        For purposes of better scheduling! W Company @2018
+                        Dive into fantasy world of Thorn
                     </Footer>
                 </Layout>
             </Router>

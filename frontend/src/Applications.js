@@ -80,7 +80,7 @@ class Applications extends React.Component {
                             <FormItem label="Application Name">
                                 <Input value={this.state.application.name}/>
                             </FormItem>
-                            <FormItem label="Creator">
+                            <FormItem label="Additional Value">
                                 <Input value={this.state.application.creatorName}/>
                             </FormItem>
                             <FormItem label="Price">
