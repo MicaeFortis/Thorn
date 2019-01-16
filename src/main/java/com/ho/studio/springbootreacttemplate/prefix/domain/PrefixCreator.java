@@ -4,9 +4,6 @@ import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 class PrefixCreator {
 
   Prefix from(PrefixDto itemPrefixDto) {

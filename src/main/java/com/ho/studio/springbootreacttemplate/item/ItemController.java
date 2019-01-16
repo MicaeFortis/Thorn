@@ -7,9 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
-/**
- * Created by MichalPC on 12.11.2018.
- */
 @RestController
 public class ItemController {
   private ItemFacade itemFacade;

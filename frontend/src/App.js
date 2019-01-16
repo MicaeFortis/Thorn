@@ -8,21 +8,15 @@ import {
     Route,
     Link
 } from 'react-router-dom';
-import {Layout, Menu, Icon} from 'antd';
+import {Layout, Menu} from 'antd';
 
-const {Header, Footer, Sider, Content} = Layout;
+const {Header, Footer, Content} = Layout;
 
 
 class App extends React.Component {
 
     state = {
         collapsed: false,
-    };
-
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
     };
 
     render() {

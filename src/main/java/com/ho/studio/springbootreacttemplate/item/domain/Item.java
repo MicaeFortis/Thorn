@@ -8,9 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 @Builder
 @Getter
 @Setter

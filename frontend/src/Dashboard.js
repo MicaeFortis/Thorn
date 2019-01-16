@@ -3,7 +3,7 @@ import React from 'react';
 const Dashboard = () => {
     return (
         <div className="container">
-            <h1>Dashboard :)</h1>
+            <h1>Hello on admin panel of game Thorn!</h1>
         </div>
     );
 };

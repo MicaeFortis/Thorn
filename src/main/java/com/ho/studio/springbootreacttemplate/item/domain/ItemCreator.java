@@ -4,9 +4,6 @@ import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 class ItemCreator {
 
   Item from(ItemDto itemDto) {

@@ -1,6 +1,6 @@
 package com.ho.studio.springbootreacttemplate.prefix.domain;
 
-import com.ho.studio.springbootreacttemplate.common.Statistic;
+import com.ho.studio.springbootreacttemplate.prefix.dto.Statistic;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import lombok.*;
 
@@ -9,9 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 @Builder
 @Getter
 @Setter

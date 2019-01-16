@@ -1,9 +1,0 @@
-.acceptButton {
-    background-color: green !important;
-    color: white !important;
-}
-.floatRight {
-    position: relative;
-    z-index: 99;
-    float: right;
-}

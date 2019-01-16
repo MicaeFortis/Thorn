@@ -4,9 +4,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 @Builder
 @Getter
 @EqualsAndHashCode

@@ -1,15 +1,11 @@
 package com.ho.studio.springbootreacttemplate.prefix;
 
-import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
 import com.ho.studio.springbootreacttemplate.prefix.domain.PrefixFacade;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
-/**
- * Created by MichalPC on 12.11.2018.
- */
 @RestController
 public class PrefixController {
   private PrefixFacade prefixFacade;
@@ -28,20 +24,18 @@ public class PrefixController {
     return prefixFacade.show(prefixId);
   }
 
-  @PutMapping("/api/prefixes/{prefixId}")
-  public PrefixDto updatePrefix(PrefixDto prefixDto) {
+  @PutMapping("/api/prefixes")
+  public PrefixDto updatePrefix(@RequestBody PrefixDto prefixDto) {
     return prefixFacade.save(prefixDto);
   }
 
-  @DeleteMapping("api/prefixes/{prefixId}")
-  public void deletePrefix(PrefixDto prefixDto) {
+  @DeleteMapping("api/prefixes")
+  public void deletePrefix(@RequestBody PrefixDto prefixDto) {
     prefixFacade.delete(prefixDto);
   }
 
   @PostMapping("/api/prefixes")
-  public PrefixDto addPrefix(PrefixDto prefixDto) {
-    return prefixFacade.save(prefixDto);
+  public PrefixDto addPrefix(@RequestBody PrefixDto prefix) {
+    return prefixFacade.save(prefix);
   }
-
-
 }

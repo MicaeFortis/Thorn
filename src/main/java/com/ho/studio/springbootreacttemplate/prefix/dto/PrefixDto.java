@@ -1,17 +1,15 @@
 package com.ho.studio.springbootreacttemplate.prefix.dto;
 
-import com.ho.studio.springbootreacttemplate.common.Statistic;
 import lombok.*;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
+import java.io.Serializable;
+
 @Builder
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class PrefixDto {
+public class PrefixDto implements Serializable {
   private Long id;
   private String name;
   private double additionalValue;

@@ -8,9 +8,6 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * Created by MichalPC on 11.11.2018.
- */
 @Transactional
 public class ItemFacade {
   private ItemRepository itemRepository;
