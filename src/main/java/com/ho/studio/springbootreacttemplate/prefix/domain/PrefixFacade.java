@@ -1,5 +1,6 @@
 package com.ho.studio.springbootreacttemplate.prefix.domain;
 
+import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,5 +42,9 @@ public class PrefixFacade {
 
   public Collection<PrefixDto> findAll() {
     return prefixRepository.findAll().stream().map(Prefix::dto).collect(toList());
+  }
+
+  public Collection<PowerUp> getPowerUps() {
+    return Prefix.getPowerUps();
   }
 }

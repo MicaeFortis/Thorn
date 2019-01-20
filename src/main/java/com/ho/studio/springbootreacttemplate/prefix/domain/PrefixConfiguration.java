@@ -10,8 +10,4 @@ public class PrefixConfiguration {
     PrefixCreator prefixCreator = new PrefixCreator();
     return new PrefixFacade(prefixRepository, prefixCreator);
   }
-
-  @Bean StatisticFacade statisticFacade() {
-    return new StatisticFacade();
-  }
 }

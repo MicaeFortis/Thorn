@@ -1,5 +1,6 @@
 import React from 'react';
 import Prefixes from './Prefixes';
+import Items from './Items';
 import 'antd/dist/antd.css';
 import Dashboard from './Dashboard';
 import {
@@ -37,6 +38,9 @@ class App extends React.Component {
                             <Menu.Item key="/prefixes">
                                 <Link to="/prefixes">Prefixes</Link>
                             </Menu.Item>
+                            <Menu.Item key="/items">
+                                <Link to="/items">Items</Link>
+                            </Menu.Item>
                         </Menu>
                     </Header>
                     <Content style={{ padding: '0 50px', marginTop: 80 }}
@@ -44,6 +48,7 @@ class App extends React.Component {
                         <Switch>
                             <Route exact path="/" component={Dashboard}/>
                             <Route path="/prefixes" component={Prefixes}/>
+                            <Route path="/items" component={Items}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>

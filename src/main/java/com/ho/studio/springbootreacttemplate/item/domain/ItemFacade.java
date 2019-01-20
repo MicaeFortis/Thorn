@@ -1,6 +1,7 @@
 package com.ho.studio.springbootreacttemplate.item.domain;
 
 import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
+import com.ho.studio.springbootreacttemplate.item.dto.ItemType;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -41,5 +42,9 @@ public class ItemFacade {
 
   public Collection<ItemDto> findAll() {
     return itemRepository.findAll().stream().map(Item::dto).collect(toList());
+  }
+
+  public Collection<ItemType> getItemTypes() {
+    return Item.getItemTypes();
   }
 }

@@ -13,5 +13,5 @@ public class PrefixDto implements Serializable {
   private Long id;
   private String name;
   private double additionalValue;
-  private Statistic statistic;
+  private PowerUp statistic;
 }

@@ -12,11 +12,14 @@ class ItemCreator {
                .id(itemDto.getId())
                .name(itemDto.getName())
                .strengthRequired(itemDto.getStrengthRequired())
-               .strengthGiven(itemDto.getStrengthGiven())
+               .damage(itemDto.getDamage())
+               .defense(itemDto.getDefense())
                .agilityRequired(itemDto.getAgilityRequired())
-               .agilityGiven(itemDto.getAgilityGiven())
-               .intelligenceGiven(itemDto.getIntelligenceGiven())
+               .evasion(itemDto.getEvasion())
+               .wisdom(itemDto.getWisdom())
                .intelligenceRequired(itemDto.getIntelligenceRequired())
+               .prefix(itemDto.getPrefix())
+               .itemType(itemDto.getItemType())
                .build();
   }
 }

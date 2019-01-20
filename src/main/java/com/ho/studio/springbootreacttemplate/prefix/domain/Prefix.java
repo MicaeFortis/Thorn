@@ -1,13 +1,18 @@
 package com.ho.studio.springbootreacttemplate.prefix.domain;
 
-import com.ho.studio.springbootreacttemplate.prefix.dto.Statistic;
+import com.ho.studio.springbootreacttemplate.item.domain.Item;
+import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
 
 @Builder
 @Getter
@@ -15,7 +20,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-class Prefix implements Serializable {
+public class Prefix implements Serializable {
 
   @Id
   @GeneratedValue
@@ -23,7 +28,10 @@ class Prefix implements Serializable {
   private String name;
 
   private double additionalValue;
-  private Statistic statistic;
+  private PowerUp statistic;
+
+  @OneToOne
+  private Item item;
 
   PrefixDto dto() {
     return PrefixDto.builder()
@@ -34,4 +42,7 @@ class Prefix implements Serializable {
                     .build();
   }
 
+  static Collection<PowerUp> getPowerUps() {
+    return asList(PowerUp.values());
+  }
 }

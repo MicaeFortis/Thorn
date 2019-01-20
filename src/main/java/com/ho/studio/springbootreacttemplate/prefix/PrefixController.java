@@ -1,6 +1,7 @@
 package com.ho.studio.springbootreacttemplate.prefix;
 
 import com.ho.studio.springbootreacttemplate.prefix.domain.PrefixFacade;
+import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,12 @@ public class PrefixController {
   }
 
   @PostMapping("/api/prefixes")
-  public PrefixDto addPrefix(@RequestBody PrefixDto prefix) {
+  public PrefixDto savePrefix(@RequestBody PrefixDto prefix) {
     return prefixFacade.save(prefix);
+  }
+
+  @GetMapping("/api/prefixes/powerups")
+  public Collection<PowerUp> getPowerUps() {
+    return prefixFacade.getPowerUps();
   }
 }

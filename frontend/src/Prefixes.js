@@ -45,7 +45,7 @@ class Prefixes extends React.Component {
   }
 
   getStatistics() {
-    fetch('http://localhost:8080/api/statistics', {
+    fetch('http://localhost:8080/api/prefixes/powerups', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -64,16 +64,17 @@ class Prefixes extends React.Component {
       title: 'Statistic Value',
       key: 'additionalValue',
       render: (text, record) => (
-        <span>
-          [{record.statistic}] {record.additionalValue}
-        </span>
+          <p>
+            <span style={{fontWeight: 'bold'}}>[{record.statistic}]</span> {record.additionalValue}
+        </p>
       ),
     }, {
       title: 'Action',
       key: 'action',
       render: (text, record) => (
           <span>
-                  <a onClick={() => this.openEditModalWithRecord(record)}>Edit</a>
+                  <a onClick={() => this.openEditModalWithRecord(
+                      record)}>Edit</a>
                   <Divider type="vertical"/>
                   <a onClick={() => this.openDeleteModalWithRecord(record)}>Delete</a>
                 </span>
@@ -81,17 +82,11 @@ class Prefixes extends React.Component {
     }];
   };
 
-  handleOk = () => {
-
-  };
-
-  handleCancel = () => {
-
-  };
-
   openEditModalWithRecord = (record) => {
     this.setState({prefix: record}, () => {
-      this.setState({editPrefixVisible: true})
+      this.setState({editPrefixVisible: true}, () => {
+        this.setPrefixStatisticIfNotSet();
+      })
     })
   };
 
@@ -102,7 +97,6 @@ class Prefixes extends React.Component {
   };
 
   savePrefix = () => {
-    alert(JSON.stringify(this.state.prefix));
     fetch('http://localhost:8080/api/prefixes', {
       method: 'post',
       headers: {
@@ -111,12 +105,10 @@ class Prefixes extends React.Component {
       },
       body: JSON.stringify(this.state.prefix)
     })
-    .then(res => res.json())
-    .then(json => this.setState({prefixes: json}));
+    .then(res => this.getPrefixes());
   };
 
   deletePrefix = () => {
-    alert(JSON.stringify(this.state.prefix));
     fetch('http://localhost:8080/api/prefixes', {
       method: 'delete',
       headers: {
@@ -124,7 +116,8 @@ class Prefixes extends React.Component {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(this.state.prefix)
-    });
+    })
+    .then(res => this.getPrefixes());
   };
 
   changePrefixProperty = (propertyName, value) => {
@@ -134,11 +127,22 @@ class Prefixes extends React.Component {
   };
 
   renderStatisticsSelector = () => {
-    let options = this.state.statistics.map((statistic) => <Option value={statistic}>{statistic}</Option>);
-    return <Select defaultValue={this.state.statistics[0] || ''} style={{width: 120}}
-                   onChange={() => {}}>
+    let options = this.state.statistics.map(
+        (statistic) => <Option value={statistic}>{statistic}</Option>);
+    return <Select
+        defaultValue={this.state.prefix.statistic || this.state.statistics[0]
+        || ''} style={{width: 120}}
+        onChange={(value) => {
+          this.changePrefixProperty('statistic', value)
+        }}>
       {options}
     </Select>
+  };
+
+  setPrefixStatisticIfNotSet = () => {
+    if (!this.state.prefix.statistic) {
+      this.changePrefixProperty("statistic", this.state.statistics[0]);
+    }
   };
 
   renderDeleteModal = () => (
@@ -146,36 +150,49 @@ class Prefixes extends React.Component {
           title="Delete prefix"
           visible={this.state.deletePrefixVisible}
           footer={false}
+          closable={true}
+          onHide={() => this.setState({deletePrefixVisible: false})}
+          onCancel={() => this.setState({deletePrefixVisible: false})}
+          onExit={() => this.setState({deletePrefixVisible: false})}
+          onBackdropClick={() => this.setState({deletePrefixVisible: false})}
       >
-        <Button type="primary"
-                onClick={() => this.deletePrefix()}>Delete</Button>
+        <Form onSubmit={() => this.deletePrefix()}>
+          <p>Are You sure You want to delete this prefix?</p>
+          <Button type="primary" htmlType="submit">Delete</Button>
+        </Form>
       </Modal>
   );
 
   renderEditModal = () => (
-    <Modal
-
-        title="Add/Edit Prefix"
-        visible={this.state.editPrefixVisible}
-        footer={false}
-    >
-      <Form onSubmit={() => this.savePrefix()}>
-        <FormItem label="Prefix Name">
-          <Input value={this.state.prefix.name || ''}
-                 onChange={(e) => this.changePrefixProperty('name',
-                     e.target.value)}/>
-        </FormItem>
-        <FormItem label="Statistic">
-          {this.renderStatisticsSelector()}
-        </FormItem>
-        <FormItem label="Additional Value">
-          <InputNumber value={this.state.prefix.additionalValue || 0}
-                       onChange={(e) => this.changePrefixProperty(
-                           'additionalValue', e.value)}/>
-        </FormItem>
-        <Button type="primary" htmlType="submit">Save Prefix</Button>
-      </Form>
-    </Modal>
+      <Modal
+          title="Add/Edit Prefix"
+          visible={this.state.editPrefixVisible}
+          footer={false}
+          closable={true}
+          onHide={() => this.setState({editPrefixVisible: false})}
+          onCancel={() => this.setState({editPrefixVisible: false})}
+          onExit={() => this.setState({editPrefixVisible: false})}
+          onBackdropClick={() => this.setState({editPrefixVisible: false})}
+      >
+        <Form onSubmit={() => this.savePrefix()}>
+          <FormItem label="Prefix Name">
+            <Input value={this.state.prefix.name || ''}
+                   onChange={(e) => this.changePrefixProperty('name',
+                       e.target.value)}/>
+          </FormItem>
+          <FormItem label="Statistic">
+            {this.renderStatisticsSelector()}
+          </FormItem>
+          <FormItem label="Additional Value">
+            <InputNumber value={this.state.prefix.additionalValue || 0}
+                         onChange={(e) => {
+                           this.changePrefixProperty(
+                               'additionalValue', e)
+                         }}/>
+          </FormItem>
+          <Button type="primary" htmlType="submit">Save Prefix</Button>
+        </Form>
+      </Modal>
   );
 
   render() {

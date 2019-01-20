@@ -1,12 +1,15 @@
 package com.ho.studio.springbootreacttemplate.item.domain;
 
 import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
+import com.ho.studio.springbootreacttemplate.item.dto.ItemType;
+import com.ho.studio.springbootreacttemplate.prefix.domain.Prefix;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
+
+import static java.util.Arrays.asList;
 
 @Builder
 @Getter
@@ -14,7 +17,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-class Item implements Serializable {
+public class Item implements Serializable {
 
   @Id
   @GeneratedValue
@@ -23,21 +26,33 @@ class Item implements Serializable {
   private double strengthRequired;
   private double agilityRequired;
   private double intelligenceRequired;
-  private double strengthGiven;
-  private double agilityGiven;
-  private double intelligenceGiven;
+  private double damage;
+  private double defense;
+  private double evasion;
+  private double wisdom;
+  private ItemType itemType;
+
+  @OneToOne
+  private Prefix prefix;
 
   ItemDto dto() {
     return ItemDto.builder()
                   .id(id)
                   .name(name)
                   .strengthRequired(strengthRequired)
-                  .strengthGiven(strengthGiven)
-                  .agilityGiven(agilityGiven)
+                  .damage(damage)
+                  .evasion(evasion)
+                  .defense(defense)
                   .agilityRequired(agilityRequired)
-                  .intelligenceGiven(intelligenceGiven)
+                  .wisdom(wisdom)
                   .intelligenceRequired(intelligenceRequired)
+                  .itemType(itemType)
+                  .prefix(prefix)
                   .build();
+  }
+
+  public static Collection<ItemType> getItemTypes() {
+    return asList(ItemType.values());
   }
 
 }
