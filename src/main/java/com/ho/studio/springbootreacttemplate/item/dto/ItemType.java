@@ -1,5 +1,9 @@
 package com.ho.studio.springbootreacttemplate.item.dto;
 
+import java.util.List;
+
+import static java.util.Arrays.asList;
+
 public enum ItemType {
   HELMET,
   WEAPON,
@@ -8,5 +12,9 @@ public enum ItemType {
   GLOVES,
   NECKLACE,
   RING,
-  BOOTS
+  BOOTS;
+
+  public static List<ItemType> getItemTypes() {
+    return asList(values());
+  }
 }

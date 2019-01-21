@@ -1,8 +1,9 @@
 import React from 'react';
-import Prefixes from './Prefixes';
-import Items from './Items';
+import Prefixes from './admin/Prefixes';
+import Items from './admin/Items';
+import Enemy from './admin/Enemy';
 import 'antd/dist/antd.css';
-import Dashboard from './Dashboard';
+import Dashboard from './admin/Dashboard';
 import {
     BrowserRouter as Router,
     Switch,
@@ -32,23 +33,27 @@ class App extends React.Component {
                             defaultSelectedKeys={['1']}
                             style={{lineHeight: '64px'}}
                         >
-                            <Menu.Item key="/">
-                                <Link to="/">Dashboard</Link>
+                            <Menu.Item key="/admin/">
+                                <Link to="/admin/">Dashboard</Link>
                             </Menu.Item>
                             <Menu.Item key="/prefixes">
-                                <Link to="/prefixes">Prefixes</Link>
+                                <Link to="/admin/prefixes">Prefixes</Link>
                             </Menu.Item>
                             <Menu.Item key="/items">
-                                <Link to="/items">Items</Link>
+                                <Link to="/admin/items">Items</Link>
+                            </Menu.Item>
+                            <Menu.Item key="/enemies">
+                                <Link to="/admin/enemies">Enemies</Link>
                             </Menu.Item>
                         </Menu>
                     </Header>
                     <Content style={{ padding: '0 50px', marginTop: 80 }}
                     >
                         <Switch>
-                            <Route exact path="/" component={Dashboard}/>
-                            <Route path="/prefixes" component={Prefixes}/>
-                            <Route path="/items" component={Items}/>
+                            <Route exact path="/admin/" component={Dashboard}/>
+                            <Route path="/admin/prefixes" component={Prefixes}/>
+                            <Route path="/admin/items" component={Items}/>
+                            <Route path="/admin/enemies" component={Enemy}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>

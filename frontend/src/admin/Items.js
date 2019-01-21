@@ -10,7 +10,7 @@ import {
   Select,
 } from 'antd';
 import './prefixes.css';
-import {isEmpty} from './Utils';
+import {isEmpty} from './../utils/Utils';
 
 const Option = Select.Option;
 const FormItem = Form.Item;

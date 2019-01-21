@@ -50,9 +50,4 @@ public class Item implements Serializable {
                   .prefix(prefix)
                   .build();
   }
-
-  public static Collection<ItemType> getItemTypes() {
-    return asList(ItemType.values());
-  }
-
 }

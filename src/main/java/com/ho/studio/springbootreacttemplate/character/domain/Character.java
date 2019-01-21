@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Builder
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
 public class Character extends Being implements Serializable {

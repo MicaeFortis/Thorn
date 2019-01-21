@@ -45,6 +45,6 @@ public class ItemFacade {
   }
 
   public Collection<ItemType> getItemTypes() {
-    return Item.getItemTypes();
+    return ItemType.getItemTypes();
   }
 }
