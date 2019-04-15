@@ -2,6 +2,8 @@ package com.ho.studio.springbootreacttemplate.prefix.domain;
 
 import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -9,16 +11,12 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
+@RequiredArgsConstructor
 @Transactional
 public class PrefixFacade {
-  private PrefixRepository prefixRepository;
-  private PrefixCreator prefixCreator;
-
-  PrefixFacade(PrefixRepository prefixRepository,
-               PrefixCreator prefixCreator) {
-    this.prefixRepository = prefixRepository;
-    this.prefixCreator = prefixCreator;
-  }
+  private final PrefixRepository prefixRepository;
+  private final PrefixCreator prefixCreator = new PrefixCreator();
 
   public PrefixDto add(PrefixDto prefixDto) {
     Prefix prefix = prefixCreator.from(prefixDto);

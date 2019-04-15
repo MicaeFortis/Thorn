@@ -1,4 +1,4 @@
-export function isEmpty(obj) {
+export function isEmpty(obj: any): boolean {
   for(var key in obj) {
     if(obj.hasOwnProperty(key))
       return false;

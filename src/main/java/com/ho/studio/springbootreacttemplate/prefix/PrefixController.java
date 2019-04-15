@@ -3,17 +3,16 @@ package com.ho.studio.springbootreacttemplate.prefix;
 import com.ho.studio.springbootreacttemplate.prefix.domain.PrefixFacade;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
 public class PrefixController {
-  private PrefixFacade prefixFacade;
 
-  public PrefixController(PrefixFacade prefixFacade) {
-    this.prefixFacade = prefixFacade;
-  }
+  @Autowired
+  private PrefixFacade prefixFacade;
 
   @GetMapping("/api/prefixes")
   public Collection<PrefixDto> getPrefixes() {

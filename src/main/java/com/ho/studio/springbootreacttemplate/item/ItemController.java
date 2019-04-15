@@ -4,17 +4,16 @@ import com.ho.studio.springbootreacttemplate.item.domain.ItemFacade;
 import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
 import com.ho.studio.springbootreacttemplate.item.dto.ItemType;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
 public class ItemController {
-  private ItemFacade itemFacade;
 
-  public ItemController(ItemFacade itemFacade) {
-    this.itemFacade = itemFacade;
-  }
+  @Autowired
+  private ItemFacade itemFacade;
 
   @GetMapping("/api/items")
   public Collection<ItemDto> getItems() {

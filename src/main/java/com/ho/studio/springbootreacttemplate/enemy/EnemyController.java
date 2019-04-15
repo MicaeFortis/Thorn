@@ -3,17 +3,16 @@ package com.ho.studio.springbootreacttemplate.enemy;
 import com.ho.studio.springbootreacttemplate.enemy.domain.EnemyFacade;
 import com.ho.studio.springbootreacttemplate.enemy.dto.EnemyDto;
 import com.ho.studio.springbootreacttemplate.enemy.dto.EnemyType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
 public class EnemyController {
-  private EnemyFacade enemyFacade;
 
-  public EnemyController(EnemyFacade enemyFacade) {
-    this.enemyFacade = enemyFacade;
-  }
+  @Autowired
+  private EnemyFacade enemyFacade;
 
   @GetMapping("/api/enemies")
   public Collection<EnemyDto> getEnemies() {

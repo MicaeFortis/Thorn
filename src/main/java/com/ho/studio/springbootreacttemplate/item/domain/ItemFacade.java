@@ -2,6 +2,8 @@ package com.ho.studio.springbootreacttemplate.item.domain;
 
 import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
 import com.ho.studio.springbootreacttemplate.item.dto.ItemType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -9,16 +11,12 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
+@RequiredArgsConstructor
 @Transactional
 public class ItemFacade {
-  private ItemRepository itemRepository;
-  private ItemCreator itemCreator;
-
-  ItemFacade(ItemRepository itemRepository,
-             ItemCreator itemCreator) {
-    this.itemRepository = itemRepository;
-    this.itemCreator = itemCreator;
-  }
+  private final ItemRepository itemRepository;
+  private final ItemCreator itemCreator = new ItemCreator();
 
   public ItemDto add(ItemDto itemDto) {
     Item item = itemCreator.from(itemDto);

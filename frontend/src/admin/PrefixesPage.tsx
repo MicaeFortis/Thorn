@@ -1,4 +1,6 @@
-import React from 'react';
+import * as React from 'react';
+import { Prefix, getEmptyPrefix } from './Prefix';
+import { Item } from './Item';
 import {
   Table,
   Divider,
@@ -14,19 +16,27 @@ import './prefixes.css';
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-class Prefixes extends React.Component {
+type PrefixesState = {
+  prefixes: Prefix[],
+  statistics: string[],
+  prefix: Prefix,
+  editPrefixVisible: boolean,
+  deletePrefixVisible: boolean,
+}
 
-  state = {
+const getInitialState = (): PrefixesState => {
+  return {
     prefixes: [],
     statistics: [],
-    prefix: {
-      name: '',
-      additionalValue: 0,
-      statistic: '',
-    },
+    prefix: getEmptyPrefix(),
     editPrefixVisible: false,
     deletePrefixVisible: false,
-  };
+  }
+}
+
+class PrefixesPage extends React.Component<{}, PrefixesState> {
+
+  state = getInitialState();
 
   componentDidMount() {
     this.getPrefixes();
@@ -63,7 +73,7 @@ class Prefixes extends React.Component {
     }, {
       title: 'Statistic Value',
       key: 'additionalValue',
-      render: (text, record) => (
+      render: (text: string, record: Prefix) => (
           <p>
             <span style={{fontWeight: 'bold'}}>[{record.statistic}]</span> {record.additionalValue}
         </p>
@@ -71,7 +81,7 @@ class Prefixes extends React.Component {
     }, {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
+      render: (text: string, record: Prefix) => (
           <span>
                   <a onClick={() => this.openEditModalWithRecord(
                       record)}>Edit</a>
@@ -82,7 +92,7 @@ class Prefixes extends React.Component {
     }];
   };
 
-  openEditModalWithRecord = (record) => {
+  openEditModalWithRecord = (record: Prefix) => {
     this.setState({prefix: record}, () => {
       this.setState({editPrefixVisible: true}, () => {
         this.setPrefixStatisticIfNotSet();
@@ -90,7 +100,7 @@ class Prefixes extends React.Component {
     })
   };
 
-  openDeleteModalWithRecord = (record) => {
+  openDeleteModalWithRecord = (record: Prefix) => {
     this.setState({prefix: record}, () => {
       this.setState({deletePrefixVisible: true})
     })
@@ -120,19 +130,19 @@ class Prefixes extends React.Component {
     .then(res => this.getPrefixes());
   };
 
-  changePrefixProperty = (propertyName, value) => {
+  changePrefixProperty = (propertyName: string, value: any) => {
     let prefixCopy = JSON.parse(JSON.stringify(this.state.prefix));
     prefixCopy[propertyName] = value;
     this.setState({prefix: prefixCopy});
   };
 
-  renderStatisticsSelector = () => {
+  renderStatisticsSelector = (): React.ReactChild => {
     let options = this.state.statistics.map(
         (statistic) => <Option value={statistic}>{statistic}</Option>);
     return <Select
         defaultValue={this.state.prefix.statistic || this.state.statistics[0]
         || ''} style={{width: 120}}
-        onChange={(value) => {
+        onChange={(value: string) => {
           this.changePrefixProperty('statistic', value)
         }}>
       {options}
@@ -145,16 +155,14 @@ class Prefixes extends React.Component {
     }
   };
 
-  renderDeleteModal = () => (
+  renderDeleteModal = (): React.ReactElement => (
       <Modal
           title="Delete prefix"
           visible={this.state.deletePrefixVisible}
           footer={false}
           closable={true}
-          onHide={() => this.setState({deletePrefixVisible: false})}
+          afterClose={() => this.setState({deletePrefixVisible: false})}
           onCancel={() => this.setState({deletePrefixVisible: false})}
-          onExit={() => this.setState({deletePrefixVisible: false})}
-          onBackdropClick={() => this.setState({deletePrefixVisible: false})}
       >
         <Form onSubmit={() => this.deletePrefix()}>
           <p>Are You sure You want to delete this prefix?</p>
@@ -163,21 +171,19 @@ class Prefixes extends React.Component {
       </Modal>
   );
 
-  renderEditModal = () => (
+  renderEditModal = (): React.ReactElement  => (
       <Modal
           title="Add/Edit Prefix"
           visible={this.state.editPrefixVisible}
           footer={false}
           closable={true}
-          onHide={() => this.setState({editPrefixVisible: false})}
+          afterClose={() => this.setState({editPrefixVisible: false})}
           onCancel={() => this.setState({editPrefixVisible: false})}
-          onExit={() => this.setState({editPrefixVisible: false})}
-          onBackdropClick={() => this.setState({editPrefixVisible: false})}
       >
         <Form onSubmit={() => this.savePrefix()}>
           <FormItem label="Prefix Name">
             <Input value={this.state.prefix.name || ''}
-                   onChange={(e) => this.changePrefixProperty('name',
+                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changePrefixProperty('name',
                        e.target.value)}/>
           </FormItem>
           <FormItem label="Statistic">
@@ -185,7 +191,7 @@ class Prefixes extends React.Component {
           </FormItem>
           <FormItem label="Additional Value">
             <InputNumber value={this.state.prefix.additionalValue || 0}
-                         onChange={(e) => {
+                         onChange={(e: any) => {
                            this.changePrefixProperty(
                                'additionalValue', e)
                          }}/>
@@ -200,7 +206,7 @@ class Prefixes extends React.Component {
         <div>
           <div>
             <Button className="acceptButton floatRight" type="primary"
-                    onClick={() => this.openEditModalWithRecord({})}>Add
+                    onClick={() => this.openEditModalWithRecord(getEmptyPrefix())}>Add
               Prefix</Button>
             <Table columns={this.getColumns()}
                    dataSource={this.state.prefixes}/>
@@ -212,4 +218,4 @@ class Prefixes extends React.Component {
   }
 }
 
-export default Prefixes;
+export default PrefixesPage;

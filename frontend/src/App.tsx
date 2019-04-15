@@ -1,9 +1,10 @@
-import React from 'react';
-import Prefixes from './admin/Prefixes';
-import Items from './admin/Items';
-import Enemy from './admin/Enemy';
+import * as React from 'react';
+import * as PrefixesPage from './admin/PrefixesPage';
+import * as ItemsPage from './admin/ItemsPage';
+import * as RegisterPage from './RegisterPage';
+import * as Enemy from './admin/Enemy';
 import 'antd/dist/antd.css';
-import Dashboard from './admin/Dashboard';
+import * as Dashboard from './admin/Dashboard';
 import {
     BrowserRouter as Router,
     Switch,
@@ -11,6 +12,7 @@ import {
     Link
 } from 'react-router-dom';
 import {Layout, Menu} from 'antd';
+import EnemiesPage from './admin/EnemiesPage';
 
 const {Header, Footer, Content} = Layout;
 
@@ -50,10 +52,12 @@ class App extends React.Component {
                     <Content style={{ padding: '0 50px', marginTop: 80 }}
                     >
                         <Switch>
-                            <Route exact path="/admin/" component={Dashboard}/>
-                            <Route path="/admin/prefixes" component={Prefixes}/>
-                            <Route path="/admin/items" component={Items}/>
-                            <Route path="/admin/enemies" component={Enemy}/>
+                            <Route exact path="/" component={Dashboard.default}/>
+                            <Route path="/login" component={Dashboard.default}/> 
+                            <Route path="/register" component={RegisterPage.default}/>
+                            <Route path="/admin/prefixes" component={PrefixesPage.default}/>
+                            <Route path="/admin/items" component={ItemsPage.default}/>
+                            <Route path="/admin/enemies" component={EnemiesPage}/>
                         </Switch>
                     </Content>
                     <Footer style={{textAlign: 'center'}}>

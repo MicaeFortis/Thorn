@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {
   Table,
   Divider,
@@ -10,28 +10,33 @@ import {
   Select,
 } from 'antd';
 import './prefixes.css';
+import { getEmptyEnemy, Enemy } from './Enemy';
 import {isEmpty} from './../utils/Utils';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-class Prefixes extends React.Component {
+type EnemyState = {
+  enemies: Enemy[],
+  enemyTypes: string[],
+  enemy: Enemy,
+  editEnemyVisible: boolean,
+  deleteEnemyVisible: boolean,
+}
 
-  state = {
+const getInitialState = (): EnemyState => {
+  return {
     enemies: [],
     enemyTypes: [],
-    enemy: {
-      name: '',
-      strength: 0,
-      agility: 0,
-      intelligence: 0,
-      enemyType: '',
-      hitPoints: 0,
-      dead: false,
-    },
+    enemy: getEmptyEnemy(),
     editEnemyVisible: false,
     deleteEnemyVisible: false,
-  };
+  }
+}
+
+class EnemiesPage extends React.Component<{}, EnemyState> {
+  
+  state = getInitialState();
 
   componentDidMount() {
     this.getEnemies();
@@ -64,7 +69,7 @@ class Prefixes extends React.Component {
     return [{
       title: 'Enemy Name',
       key: 'name',
-      render: (text, record) => (
+      render: (text: string, record: Enemy) => (
           <span>
             [{record.enemyType}] {record.name}
           </span>
@@ -88,7 +93,7 @@ class Prefixes extends React.Component {
     }, {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
+      render: (text: string, record: Enemy) => (
           <span>
                   <a onClick={() => this.openEditModalWithRecord(
                       record)}>Edit</a>
@@ -99,7 +104,7 @@ class Prefixes extends React.Component {
     }];
   };
 
-  openEditModalWithRecord = (record) => {
+  openEditModalWithRecord = (record: Enemy) => {
     this.setState({enemy: record}, () => {
       this.setState({editEnemyVisible: true}, () => {
         this.setEnemyEnemyTypeIfNotSet();
@@ -107,7 +112,7 @@ class Prefixes extends React.Component {
     })
   };
 
-  openDeleteModalWithRecord = (record) => {
+  openDeleteModalWithRecord = (record: Enemy) => {
     this.setState({enemy: record}, () => {
       this.setState({deleteEnemyVisible: true})
     })
@@ -137,7 +142,7 @@ class Prefixes extends React.Component {
     .then(res => this.getEnemies());
   };
 
-  changeEnemyProperty = (propertyName, value) => {
+  changeEnemyProperty = (propertyName: string, value: number | string) => {
     let enemyCopy = JSON.parse(JSON.stringify(this.state.enemy));
     enemyCopy[propertyName] = value;
     this.setState({enemy: enemyCopy});
@@ -148,7 +153,7 @@ class Prefixes extends React.Component {
         (enemyType) => <Option value={enemyType}>{enemyType}</Option>);
     return <Select
         defaultValue={this.state.enemy.enemyType || this.state.enemyTypes[0] || ''} style={{width: 120}}
-        onChange={(value) => {
+        onChange={(value: string) => {
           this.changeEnemyProperty('enemyType', value)
         }}>
       {options}
@@ -167,10 +172,8 @@ class Prefixes extends React.Component {
           visible={this.state.deleteEnemyVisible}
           footer={false}
           closable={true}
-          onHide={() => this.setState({deleteEnemyVisible: false})}
+          afterClose={() => this.setState({deleteEnemyVisible: false})}
           onCancel={() => this.setState({deleteEnemyVisible: false})}
-          onExit={() => this.setState({deleteEnemyVisible: false})}
-          onBackdropClick={() => this.setState({deleteEnemyVisible: false})}
       >
         <Form onSubmit={() => this.deleteEnemy()}>
           <p>Are You sure You want to delete this enemy?</p>
@@ -185,15 +188,13 @@ class Prefixes extends React.Component {
           visible={this.state.editEnemyVisible}
           footer={false}
           closable={true}
-          onHide={() => this.setState({editEnemyVisible: false})}
+          afterClose={() => this.setState({editEnemyVisible: false})}
           onCancel={() => this.setState({editEnemyVisible: false})}
-          onExit={() => this.setState({editEnemyVisible: false})}
-          onBackdropClick={() => this.setState({editEnemyVisible: false})}
       >
         <Form onSubmit={() => this.saveEnemy()}>
           <FormItem label="Enemy Name">
             <Input value={this.state.enemy.name || ''}
-                   onChange={(e) => this.changeEnemyProperty('name',
+                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changeEnemyProperty('name',
                        e.target.value)}/>
           </FormItem>
           <FormItem label="Enemy Type">
@@ -201,28 +202,28 @@ class Prefixes extends React.Component {
           </FormItem>
           <FormItem label="Strength">
             <InputNumber value={this.state.enemy.strength || 0}
-                         onChange={(e) => {
+                         onChange={(e: any) => {
                            this.changeEnemyProperty(
                                'strength', e)
                          }}/>
           </FormItem>
           <FormItem label="Agility">
             <InputNumber value={this.state.enemy.agility || 0}
-                         onChange={(e) => {
+                         onChange={(e: any) => {
                            this.changeEnemyProperty(
                                'agility', e)
                          }}/>
           </FormItem>
           <FormItem label="Intelligence">
             <InputNumber value={this.state.enemy.intelligence || 0}
-                         onChange={(e) => {
+                         onChange={(e: any) => {
                            this.changeEnemyProperty(
                                'intelligence', e)
                          }}/>
           </FormItem>
           <FormItem label="Hit Points">
             <InputNumber value={this.state.enemy.hitPoints || 0}
-                         onChange={(e) => {
+                         onChange={(e: any) => {
                            this.changeEnemyProperty(
                                'hitPoints', e)
                          }}/>
@@ -237,7 +238,7 @@ class Prefixes extends React.Component {
         <div>
           <div>
             <Button className="acceptButton floatRight" type="primary"
-                    onClick={() => this.openEditModalWithRecord({})}>Add
+                    onClick={() => this.openEditModalWithRecord(getEmptyEnemy())}>Add
               Enemy</Button>
             <Table columns={this.getColumns()}
                    dataSource={this.state.enemies}/>
@@ -249,4 +250,4 @@ class Prefixes extends React.Component {
   }
 }
 
-export default Prefixes;
+export default EnemiesPage;

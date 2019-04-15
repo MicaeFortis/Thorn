@@ -2,6 +2,8 @@ package com.ho.studio.springbootreacttemplate.enemy.domain;
 
 import com.ho.studio.springbootreacttemplate.enemy.dto.EnemyDto;
 import com.ho.studio.springbootreacttemplate.enemy.dto.EnemyType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
@@ -9,16 +11,12 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
+@RequiredArgsConstructor
 @Transactional
 public class EnemyFacade {
-  private EnemyRepository enemyRepository;
-  private EnemyCreator enemyCreator;
-
-  EnemyFacade(EnemyRepository enemyRepository,
-              EnemyCreator enemyCreator) {
-    this.enemyRepository = enemyRepository;
-    this.enemyCreator = enemyCreator;
-  }
+  private final EnemyRepository enemyRepository;
+  private final EnemyCreator enemyCreator = new EnemyCreator();
 
   public EnemyDto show(Long id) {
     Optional<Enemy> enemy = enemyRepository.findById(id);
