@@ -11,7 +11,7 @@ export interface Item {
       evasion: number,
       wisdom: number,
       itemType: string,
-      prefix: Prefix,
+      prefix?: Prefix,
 }
 
 export function getEmptyItem(): Item {
@@ -25,6 +25,6 @@ export function getEmptyItem(): Item {
         evasion: 0,
         wisdom: 0,
         itemType: '',
-        prefix: getEmptyPrefix(),
+        prefix: undefined,
       };
 }

@@ -1,18 +1,13 @@
 import * as React from 'react';
 import {
-  Table,
-  Divider,
   Form,
   Input,
-  InputNumber,
   Button,
-  Modal,
-  Select,
 } from 'antd';
 import { User, getEmptyUser } from './User';
 import { api } from './api/Api';
 import { observer, inject } from 'mobx-react';
-import { AppStoreType, AppStore } from './store/AppStore';
+import { AppStore } from './store/AppStore';
 
 const FormItem = Form.Item;
 
@@ -28,7 +23,7 @@ const getInitialState = (): State => {
   return {
     user: getEmptyUser(),
   }
-}
+};
 
 @inject('appStore')
 @observer
@@ -55,7 +50,7 @@ class LoginPage extends React.Component<Props, State> {
 
   setAuthenticationHeader = (res: any) => {
     this.props.appStore!.setAuthenticationHeader(res.headers.authorization)
-  }
+  };
 
   renderLoginForm = () => (
         <Form onSubmit={(e) => this.login(e)}>

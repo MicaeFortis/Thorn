@@ -8,6 +8,7 @@ import {
   Button,
   Modal,
   Select,
+  message,
 } from 'antd';
 import './prefixes.css';
 import { getEmptyEnemy, Enemy } from './Enemy';
@@ -61,7 +62,11 @@ class EnemiesPage extends React.Component<Props, State> {
       }
     })
     .then(res => this.setState({enemies: res.data}))
-    .catch(err => alert(JSON.stringify(err)));
+    .catch(err => {
+      if (err.response.data.status === 403) {
+        message.error('You are not supposed to be here!');
+      }
+    });
   }
 
   getEnemyTypes() {
@@ -73,7 +78,7 @@ class EnemiesPage extends React.Component<Props, State> {
       }
     })
     .then(res => this.setState({enemyTypes: res.data}))
-    .catch(err => alert(JSON.stringify(err)));
+    .catch(err => {});
   }
 
   getColumns = () => {

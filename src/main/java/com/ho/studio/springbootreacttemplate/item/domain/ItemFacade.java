@@ -16,10 +16,9 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class ItemFacade {
   private final ItemRepository itemRepository;
-  private final ItemCreator itemCreator = new ItemCreator();
 
   public ItemDto add(ItemDto itemDto) {
-    Item item = itemCreator.from(itemDto);
+    Item item = ItemCreator.from(itemDto);
     return itemRepository.save(item).dto();
   }
 
@@ -29,12 +28,12 @@ public class ItemFacade {
   }
 
   public void delete(ItemDto itemDto) {
-    Item item = itemCreator.from(itemDto);
+    Item item = ItemCreator.from(itemDto);
     itemRepository.delete(item);
   }
 
   public ItemDto save(ItemDto itemDto) {
-    Item item = itemCreator.from(itemDto);
+    Item item = ItemCreator.from(itemDto);
     return itemRepository.save(item).dto();
   }
 

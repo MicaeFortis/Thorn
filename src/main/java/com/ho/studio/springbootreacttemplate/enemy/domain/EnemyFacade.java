@@ -16,7 +16,6 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class EnemyFacade {
   private final EnemyRepository enemyRepository;
-  private final EnemyCreator enemyCreator = new EnemyCreator();
 
   public EnemyDto show(Long id) {
     Optional<Enemy> enemy = enemyRepository.findById(id);
@@ -24,12 +23,12 @@ public class EnemyFacade {
   }
 
   public void delete(EnemyDto itemDto) {
-    Enemy item = enemyCreator.from(itemDto);
+    Enemy item = EnemyCreator.from(itemDto);
     enemyRepository.delete(item);
   }
 
   public EnemyDto save(EnemyDto itemDto) {
-    Enemy item = enemyCreator.from(itemDto);
+    Enemy item = EnemyCreator.from(itemDto);
     return enemyRepository.save(item).dto();
   }
 

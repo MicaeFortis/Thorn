@@ -1,6 +1,8 @@
 package com.ho.studio.springbootreacttemplate.item.dto;
 
 import com.ho.studio.springbootreacttemplate.prefix.domain.Prefix;
+import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
+
 import lombok.*;
 
 import java.io.Serializable;
@@ -21,5 +23,5 @@ public class ItemDto implements Serializable {
   private double evasion;
   private double wisdom;
   private ItemType itemType;
-  private Prefix prefix;
+  private PrefixDto prefix;
 }

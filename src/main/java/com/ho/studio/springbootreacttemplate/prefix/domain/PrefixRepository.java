@@ -7,4 +7,6 @@ import java.util.Collection;
 interface PrefixRepository extends CrudRepository<Prefix, Long> {
 
   Collection<Prefix> findAll();
+
+  Prefix findByIdAndItemsEmpty(Long id);
 }

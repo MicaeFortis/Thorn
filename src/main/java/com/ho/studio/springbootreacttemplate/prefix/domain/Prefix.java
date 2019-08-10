@@ -1,16 +1,18 @@
 package com.ho.studio.springbootreacttemplate.prefix.domain;
 
+import lombok.*;
+
 import com.ho.studio.springbootreacttemplate.item.domain.Item;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
-import lombok.*;
 
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import java.io.Serializable;
-import java.util.Collection;
+import javax.persistence.OneToMany;
 
 import static java.util.Arrays.asList;
 
@@ -30,10 +32,10 @@ public class Prefix implements Serializable {
   private double additionalValue;
   private PowerUp statistic;
 
-  @OneToOne
-  private Item item;
+  @OneToMany(mappedBy = "prefix")
+  private List<Item> items;
 
-  PrefixDto dto() {
+  public PrefixDto dto() {
     return PrefixDto.builder()
                     .id(id)
                     .name(name)

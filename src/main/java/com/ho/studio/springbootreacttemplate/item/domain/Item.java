@@ -32,7 +32,8 @@ public class Item implements Serializable {
   private double wisdom;
   private ItemType itemType;
 
-  @OneToOne
+  @ManyToOne
+  @JoinColumn(name = "prefix_id")
   private Prefix prefix;
 
   ItemDto dto() {
@@ -47,7 +48,7 @@ public class Item implements Serializable {
                   .wisdom(wisdom)
                   .intelligenceRequired(intelligenceRequired)
                   .itemType(itemType)
-                  .prefix(prefix)
+                  .prefix(prefix.dto())
                   .build();
   }
 }

@@ -3,6 +3,8 @@ package com.ho.studio.springbootreacttemplate.prefix.domain;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PowerUp;
 import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 import lombok.RequiredArgsConstructor;
+
+import com.ho.studio.springbootreacttemplate.shared.ResourceAlreadyInUse;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +18,10 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class PrefixFacade {
   private final PrefixRepository prefixRepository;
-  private final PrefixCreator prefixCreator = new PrefixCreator();
+  private final PrefixValidator prefixValidator;
 
   public PrefixDto add(PrefixDto prefixDto) {
-    Prefix prefix = prefixCreator.from(prefixDto);
+    Prefix prefix = PrefixCreator.from(prefixDto);
     return prefixRepository.save(prefix).dto();
   }
 
@@ -29,12 +31,16 @@ public class PrefixFacade {
   }
 
   public void delete(PrefixDto prefixDto) {
-    Prefix prefix = prefixCreator.from(prefixDto);
+    Prefix prefix = PrefixCreator.from(prefixDto);
+    if (prefixValidator.isPrefixAlreadyUsed(prefix)) {
+      throw new ResourceAlreadyInUse("Prefix");
+    }
+
     prefixRepository.delete(prefix);
   }
 
   public PrefixDto save(PrefixDto prefixDto) {
-    Prefix prefix = prefixCreator.from(prefixDto);
+    Prefix prefix = PrefixCreator.from(prefixDto);
     return prefixRepository.save(prefix).dto();
   }
 

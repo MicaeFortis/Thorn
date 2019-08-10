@@ -2,26 +2,33 @@ package com.ho.studio.springbootreacttemplate.config.authorization;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.ho.studio.springbootreacttemplate.user.domain.User;
+import com.ho.studio.springbootreacttemplate.user.domain.UserFacade;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
 
-import static com.ho.studio.springbootreacttemplate.config.authorization.SecurityConstants.HEADER_STRING;
-import static com.ho.studio.springbootreacttemplate.config.authorization.SecurityConstants.SECRET;
-import static com.ho.studio.springbootreacttemplate.config.authorization.SecurityConstants.TOKEN_PREFIX;
+import static com.ho.studio.springbootreacttemplate.config.authorization.SecurityConstants.*;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-  public JWTAuthorizationFilter(AuthenticationManager authManager) {
+  private UserFacade userFacade;
+
+  public JWTAuthorizationFilter(AuthenticationManager authManager, UserFacade userFacade) {
     super(authManager);
+    this.userFacade = userFacade;
   }
 
   @Override
@@ -51,10 +58,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
                        .getSubject();
 
       if (user != null) {
-        return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+        List<SimpleGrantedAuthority> authorities = getAuthorities(user);
+        return new UsernamePasswordAuthenticationToken(user, null, authorities);
       }
       return null;
     }
     return null;
+  }
+
+  private List<SimpleGrantedAuthority> getAuthorities(String username) {
+    return userFacade.loadUserByUsername(username).getAuthorities();
   }
 }

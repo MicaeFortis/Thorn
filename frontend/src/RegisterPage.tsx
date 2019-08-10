@@ -34,21 +34,18 @@ class RegisterPage extends React.Component<{}, RegisterState> {
     this.setState({user: userCopy});
   };
 
-  saveUser = (): void => {
+  saveUser = (e: React.FormEvent): void => {
+    e.preventDefault();
     api.request({
       url: 'auth/register',
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
       data: this.state.user,
     })
     .catch(err => alert(JSON.stringify(err)));
   };
 
   renderRegisterForm = () => (
-        <Form onSubmit={() => this.saveUser()}>
+        <Form onSubmit={(e) => this.saveUser(e)}>
           <FormItem label="Username">
             <Input value={this.state.user.username || ''} placeholder="Username"
                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changeUserProperty('username',

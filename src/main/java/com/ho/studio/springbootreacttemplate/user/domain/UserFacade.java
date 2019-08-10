@@ -20,7 +20,7 @@ public class UserFacade implements UserDetailsService {
   private final UserCreator userCreator = new UserCreator();
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+  public User loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userRepository.findUserByUsername(username);
 
     if(user == null) {

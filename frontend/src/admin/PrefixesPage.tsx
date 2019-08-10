@@ -10,13 +10,22 @@ import {
   Button,
   Modal,
   Select,
+  message,
 } from 'antd';
 import './prefixes.css';
+import { inject, observer } from 'mobx-react';
+import { api } from '../api/Api';
+import { AppStore } from '../store/AppStore';
+import _ from 'lodash';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-type PrefixesState = {
+interface Props {
+  appStore?: AppStore,
+}
+
+interface State {
   prefixes: Prefix[],
   statistics: string[],
   prefix: Prefix,
@@ -24,7 +33,7 @@ type PrefixesState = {
   deletePrefixVisible: boolean,
 }
 
-const getInitialState = (): PrefixesState => {
+const getInitialState = (): State => {
   return {
     prefixes: [],
     statistics: [],
@@ -34,7 +43,9 @@ const getInitialState = (): PrefixesState => {
   }
 }
 
-class PrefixesPage extends React.Component<{}, PrefixesState> {
+@inject('appStore')
+@observer
+class PrefixesPage extends React.Component<Props, State> {
 
   state = getInitialState();
 
@@ -44,25 +55,31 @@ class PrefixesPage extends React.Component<{}, PrefixesState> {
   }
 
   getPrefixes() {
-    fetch('http://localhost:8080/api/prefixes', {
+    api.request<Array<Prefix>>({
+      url: 'api/prefixes',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       }
     })
-    .then(res => res.json())
-    .then(json => this.setState({prefixes: json}));
+    .then(res => this.setState({prefixes: res.data}))
+    .catch(err => {
+      if (err.response.data.status === 403) {
+        message.error('You are not supposed to be here!');
+      }
+    });
   }
 
   getStatistics() {
-    fetch('http://localhost:8080/api/prefixes/powerups', {
+    api.request<Array<string>>({
+      url: 'api/prefixes/powerups',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       }
     })
-    .then(res => res.json())
-    .then(json => this.setState({statistics: json}));
+    .then(res => this.setState({statistics: res.data}))
+    .catch(err => {});
   }
 
   getColumns = () => {
@@ -106,28 +123,44 @@ class PrefixesPage extends React.Component<{}, PrefixesState> {
     })
   };
 
-  savePrefix = () => {
-    fetch('http://localhost:8080/api/prefixes', {
-      method: 'post',
+  savePrefix = (e: React.FormEvent) => {
+    e.preventDefault();
+    api.request({
+      url: 'api/prefixes',
+      method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       },
-      body: JSON.stringify(this.state.prefix)
+      data: this.state.prefix
     })
-    .then(res => this.getPrefixes());
+    .then(() => {
+      this.getPrefixes()
+      this.setState({editPrefixVisible: false}) 
+    })
+    .catch(err => alert(JSON.stringify(err)));
   };
 
-  deletePrefix = () => {
-    fetch('http://localhost:8080/api/prefixes', {
-      method: 'delete',
+  deletePrefix = (e: React.FormEvent) => {
+    e.preventDefault();
+    api.request({
+      url: 'api/prefixes',
+      method: 'DELETE',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       },
-      body: JSON.stringify(this.state.prefix)
+      data: this.state.prefix
     })
-    .then(res => this.getPrefixes());
+    .then(() => {
+      this.getPrefixes()
+      this.setState({deletePrefixVisible: false}) 
+    })
+    .catch(err => {
+      if (err.response.status === 409) {
+        message.error(err.response.data.message);
+      } else {
+        message.error("Unexpected error!");
+      }
+    });
   };
 
   changePrefixProperty = (propertyName: string, value: any) => {
@@ -164,7 +197,7 @@ class PrefixesPage extends React.Component<{}, PrefixesState> {
           afterClose={() => this.setState({deletePrefixVisible: false})}
           onCancel={() => this.setState({deletePrefixVisible: false})}
       >
-        <Form onSubmit={() => this.deletePrefix()}>
+        <Form onSubmit={(e) => this.deletePrefix(e)}>
           <p>Are You sure You want to delete this prefix?</p>
           <Button type="primary" htmlType="submit">Delete</Button>
         </Form>
@@ -180,7 +213,7 @@ class PrefixesPage extends React.Component<{}, PrefixesState> {
           afterClose={() => this.setState({editPrefixVisible: false})}
           onCancel={() => this.setState({editPrefixVisible: false})}
       >
-        <Form onSubmit={() => this.savePrefix()}>
+        <Form onSubmit={(e) => this.savePrefix(e)}>
           <FormItem label="Prefix Name">
             <Input value={this.state.prefix.name || ''}
                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changePrefixProperty('name',

@@ -1,12 +1,13 @@
 package com.ho.studio.springbootreacttemplate.item.domain;
 
 import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
+import com.ho.studio.springbootreacttemplate.prefix.domain.PrefixCreator;
 
 import static java.util.Objects.requireNonNull;
 
-class ItemCreator {
+public class ItemCreator {
 
-  Item from(ItemDto itemDto) {
+  public static Item from(ItemDto itemDto) {
     requireNonNull(itemDto);
     return Item.builder()
                .id(itemDto.getId())
@@ -18,7 +19,7 @@ class ItemCreator {
                .evasion(itemDto.getEvasion())
                .wisdom(itemDto.getWisdom())
                .intelligenceRequired(itemDto.getIntelligenceRequired())
-               .prefix(itemDto.getPrefix())
+               .prefix(PrefixCreator.from(itemDto.getPrefix()))
                .itemType(itemDto.getItemType())
                .build();
   }

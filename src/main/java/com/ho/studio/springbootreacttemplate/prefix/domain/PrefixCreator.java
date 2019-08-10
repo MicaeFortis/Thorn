@@ -4,9 +4,9 @@ import com.ho.studio.springbootreacttemplate.prefix.dto.PrefixDto;
 
 import static java.util.Objects.requireNonNull;
 
-class PrefixCreator {
+public class PrefixCreator {
 
-  Prefix from(PrefixDto itemPrefixDto) {
+  public static Prefix from(PrefixDto itemPrefixDto) {
     requireNonNull(itemPrefixDto);
     return Prefix.builder()
                  .id(itemPrefixDto.getId())

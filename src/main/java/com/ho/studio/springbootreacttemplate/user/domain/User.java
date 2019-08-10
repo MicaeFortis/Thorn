@@ -43,7 +43,7 @@ public class User implements UserDetails {
   private List<Role> roles;
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
+  public List<SimpleGrantedAuthority> getAuthorities() {
     return roles.stream().map(Role::getRoleName)
          .map(SimpleGrantedAuthority::new)
          .collect(toList());

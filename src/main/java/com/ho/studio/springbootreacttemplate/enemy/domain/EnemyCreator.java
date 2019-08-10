@@ -6,9 +6,9 @@ import com.ho.studio.springbootreacttemplate.item.dto.ItemDto;
 
 import static java.util.Objects.requireNonNull;
 
-class EnemyCreator {
+public class EnemyCreator {
 
-  Enemy from(EnemyDto enemyDto) {
+  public static Enemy from(EnemyDto enemyDto) {
     requireNonNull(enemyDto);
     return Enemy.builder()
                 .id(enemyDto.getId())
