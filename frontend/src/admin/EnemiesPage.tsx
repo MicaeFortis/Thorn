@@ -12,11 +12,18 @@ import {
 import './prefixes.css';
 import { getEmptyEnemy, Enemy } from './Enemy';
 import {isEmpty} from './../utils/Utils';
+import { observer, inject } from 'mobx-react';
+import { AppStore } from '../store/AppStore';
+import { api } from '../api/Api';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
 
-type EnemyState = {
+interface Props {
+  appStore?: AppStore,
+}
+
+interface State {
   enemies: Enemy[],
   enemyTypes: string[],
   enemy: Enemy,
@@ -24,7 +31,7 @@ type EnemyState = {
   deleteEnemyVisible: boolean,
 }
 
-const getInitialState = (): EnemyState => {
+const getInitialState = (): State => {
   return {
     enemies: [],
     enemyTypes: [],
@@ -34,7 +41,9 @@ const getInitialState = (): EnemyState => {
   }
 }
 
-class EnemiesPage extends React.Component<{}, EnemyState> {
+@inject('appStore')
+@observer
+class EnemiesPage extends React.Component<Props, State> {
   
   state = getInitialState();
 
@@ -43,26 +52,28 @@ class EnemiesPage extends React.Component<{}, EnemyState> {
     this.getEnemyTypes();
   }
 
-  getEnemies() {
-    fetch('http://localhost:8080/api/enemies', {
+  getEnemies = (): void => {
+    api.request<Array<Enemy>>({
+      url: 'api/enemies',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       }
     })
-    .then(res => res.json())
-    .then(json => this.setState({enemies: json}));
+    .then(res => this.setState({enemies: res.data}))
+    .catch(err => alert(JSON.stringify(err)));
   }
 
   getEnemyTypes() {
-    fetch('http://localhost:8080/api/enemies/enemytypes', {
+    api.request<Array<string>>({
+      url: 'api/enemies/enemytypes',
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       }
     })
-    .then(res => res.json())
-    .then(json => this.setState({enemyTypes: json}));
+    .then(res => this.setState({enemyTypes: res.data}))
+    .catch(err => alert(JSON.stringify(err)));
   }
 
   getColumns = () => {
@@ -118,28 +129,38 @@ class EnemiesPage extends React.Component<{}, EnemyState> {
     })
   };
 
-  saveEnemy = () => {
-    fetch('http://localhost:8080/api/enemies', {
-      method: 'post',
+  saveEnemy = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    api.request({
+      url: 'api/enemies',
+      method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       },
-      body: JSON.stringify(this.state.enemy)
+      data: this.state.enemy
     })
-    .then(res => this.getEnemies());
+    .then(() => {
+      this.getEnemies()
+      this.setState({editEnemyVisible: false}) 
+    })
+    .catch(err => alert(JSON.stringify(err)));
   };
 
-  deleteEnemy = () => {
-    fetch('http://localhost:8080/api/enemies', {
-      method: 'delete',
+  deleteEnemy = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    api.request({
+      url: 'api/enemies',
+      method: 'DELETE',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Authorization': this.props.appStore!.authenticationHeader
       },
-      body: JSON.stringify(this.state.enemy)
+      data: this.state.enemy
     })
-    .then(res => this.getEnemies());
+    .then(() => {
+      this.getEnemies()
+      this.setState({deleteEnemyVisible: false}) 
+    })
+    .catch(err => alert(JSON.stringify(err)));
   };
 
   changeEnemyProperty = (propertyName: string, value: number | string) => {
@@ -175,7 +196,7 @@ class EnemiesPage extends React.Component<{}, EnemyState> {
           afterClose={() => this.setState({deleteEnemyVisible: false})}
           onCancel={() => this.setState({deleteEnemyVisible: false})}
       >
-        <Form onSubmit={() => this.deleteEnemy()}>
+        <Form onSubmit={(e) => this.deleteEnemy(e)}>
           <p>Are You sure You want to delete this enemy?</p>
           <Button type="primary" htmlType="submit">Delete</Button>
         </Form>
@@ -191,7 +212,7 @@ class EnemiesPage extends React.Component<{}, EnemyState> {
           afterClose={() => this.setState({editEnemyVisible: false})}
           onCancel={() => this.setState({editEnemyVisible: false})}
       >
-        <Form onSubmit={() => this.saveEnemy()}>
+        <Form onSubmit={(e) => this.saveEnemy(e)}>
           <FormItem label="Enemy Name">
             <Input value={this.state.enemy.name || ''}
                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changeEnemyProperty('name',

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserFacade implements UserDetailsService {
 
   private final UserRepository userRepository;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
   private final UserCreator userCreator = new UserCreator();
 
   @Override
@@ -30,6 +32,7 @@ public class UserFacade implements UserDetailsService {
 
   public UserDto save(UserDto userDto) {
     User user = userCreator.from(userDto);
+    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
     return userRepository.save(user).dto();
   }
 }

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as PrefixesPage from './admin/PrefixesPage';
-import * as ItemsPage from './admin/ItemsPage';
-import * as RegisterPage from './RegisterPage';
+import React from 'react';
+import PrefixesPage from './admin/PrefixesPage';
+import ItemsPage from './admin/ItemsPage';
+import RegisterPage from './RegisterPage';
 import * as Enemy from './admin/Enemy';
 import 'antd/dist/antd.css';
-import * as Dashboard from './admin/Dashboard';
+import Dashboard from './admin/Dashboard';
 import {
     BrowserRouter as Router,
     Switch,
@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 import {Layout, Menu} from 'antd';
 import EnemiesPage from './admin/EnemiesPage';
+import LoginPage from './LoginPage';
 
 const {Header, Footer, Content} = Layout;
 
@@ -52,11 +53,11 @@ class App extends React.Component {
                     <Content style={{ padding: '0 50px', marginTop: 80 }}
                     >
                         <Switch>
-                            <Route exact path="/" component={Dashboard.default}/>
-                            <Route path="/login" component={Dashboard.default}/> 
-                            <Route path="/register" component={RegisterPage.default}/>
-                            <Route path="/admin/prefixes" component={PrefixesPage.default}/>
-                            <Route path="/admin/items" component={ItemsPage.default}/>
+                            <Route exact path="/" component={Dashboard}/>
+                            <Route path="/login" component={LoginPage}/> 
+                            <Route path="/register" component={RegisterPage}/>
+                            <Route path="/admin/prefixes" component={PrefixesPage}/>
+                            <Route path="/admin/items" component={ItemsPage}/>
                             <Route path="/admin/enemies" component={EnemiesPage}/>
                         </Switch>
                     </Content>

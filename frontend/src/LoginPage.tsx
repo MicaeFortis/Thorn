@@ -11,20 +11,28 @@ import {
 } from 'antd';
 import { User, getEmptyUser } from './User';
 import { api } from './api/Api';
+import { observer, inject } from 'mobx-react';
+import { AppStoreType, AppStore } from './store/AppStore';
 
 const FormItem = Form.Item;
 
-type RegisterState = {
+interface Props {
+  appStore?: AppStore,
+}
+
+interface State {
   user: User,
 }
 
-const getInitialState = (): RegisterState => {
+const getInitialState = (): State => {
   return {
     user: getEmptyUser(),
   }
 }
 
-class RegisterPage extends React.Component<{}, RegisterState> {
+@inject('appStore')
+@observer
+class LoginPage extends React.Component<Props, State> {
   
   state = getInitialState();
 
@@ -34,33 +42,33 @@ class RegisterPage extends React.Component<{}, RegisterState> {
     this.setState({user: userCopy});
   };
 
-  saveUser = (): void => {
+  login = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
     api.request({
-      url: 'auth/register',
+      url: 'login',
       method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
       data: this.state.user,
     })
+    .then(res => this.setAuthenticationHeader(res))
     .catch(err => alert(JSON.stringify(err)));
   };
 
-  renderRegisterForm = () => (
-        <Form onSubmit={() => this.saveUser()}>
+  setAuthenticationHeader = (res: any) => {
+    this.props.appStore!.setAuthenticationHeader(res.headers.authorization)
+  }
+
+  renderLoginForm = () => (
+        <Form onSubmit={(e) => this.login(e)}>
           <FormItem label="Username">
             <Input value={this.state.user.username || ''} placeholder="Username"
-                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changeUserProperty('username',
-                       e.target.value)}/>
+                   onChange={e => this.changeUserProperty('username', e.target.value)}/>
           </FormItem>
           <FormItem label="Password">
             <Input value={this.state.user.password || ''}
                    type="password" placeholder="Password"
-                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.changeUserProperty('password',
-                       e.target.value)}/>
+                   onChange={e => this.changeUserProperty('password', e.target.value)}/>
           </FormItem>
-          <Button type="primary" htmlType="submit">Let's start with the world of thorn!</Button>
+          <Button type="primary" htmlType="submit">Login</Button>
         </Form>
   );
 
@@ -68,11 +76,12 @@ class RegisterPage extends React.Component<{}, RegisterState> {
     return (
         <div>
           <div>
-            {this.renderRegisterForm()}
+            <span>{this.props.appStore!.authenticationHeader}</span>
+            {this.renderLoginForm()}
           </div>
         </div>
     );
   }
 }
 
-export default RegisterPage;
+export default LoginPage;

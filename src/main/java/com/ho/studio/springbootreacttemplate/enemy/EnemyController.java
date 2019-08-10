@@ -20,23 +20,23 @@ public class EnemyController {
   }
 
   @GetMapping("/api/enemies/{enemyId}")
-  public EnemyDto getEnemy(Long enemyId) {
+  public EnemyDto getEnemy(@PathVariable Long enemyId) {
     return enemyFacade.show(enemyId);
   }
 
   @PutMapping("/api/enemies")
-  public EnemyDto updateEnemy(@RequestBody EnemyDto itemDto) {
-    return enemyFacade.save(itemDto);
+  public EnemyDto updateEnemy(@RequestBody EnemyDto enemyDto) {
+    return enemyFacade.save(enemyDto);
   }
 
-  @DeleteMapping("api/enemies")
-  public void deleteEnemy(@RequestBody EnemyDto itemDto) {
-    enemyFacade.delete(itemDto);
+  @DeleteMapping("/api/enemies")
+  public @ResponseBody void deleteEnemy(@RequestBody EnemyDto enemyDto) {
+    enemyFacade.delete(enemyDto);
   }
 
   @PostMapping("/api/enemies")
-  public EnemyDto saveEnemy(@RequestBody EnemyDto itemDto) {
-    return enemyFacade.save(itemDto);
+  public EnemyDto saveEnemy(@RequestBody EnemyDto enemyDto) {
+    return enemyFacade.save(enemyDto);
   }
 
   @GetMapping("/api/enemies/enemytypes")

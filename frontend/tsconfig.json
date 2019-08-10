@@ -13,6 +13,7 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true
